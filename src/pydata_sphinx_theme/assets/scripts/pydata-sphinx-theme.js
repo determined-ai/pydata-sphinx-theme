@@ -293,9 +293,16 @@ function checkPageExistsAndRedirect(event) {
 
   fetch(tryUrl, { method: "HEAD" })
     .then(() => {
-      location.href = tryUrl;
-    }) // if the page exists, go there
+      if (head.ok) {
+        // if the page exists, go there
+        location.href = tryUrl;
+      } else {
+        // 404 or something; go to docs homepage instead
+        location.href = otherDocsHomepage;
+      }
+    })
     .catch((error) => {
+      // something went wrong, probably CORS restriction, fallback to other docs homepage
       location.href = otherDocsHomepage;
     });
 
